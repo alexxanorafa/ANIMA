@@ -1,6 +1,6 @@
 // ============================================
 // SISTEMA ANIMA - Shamanic OS
-// Versão final - Lógica apenas
+// Versão final - Usa ficheiros JavaScript para dados
 // ============================================
 
 // ESTADO DA APLICAÇÃO
@@ -13,42 +13,33 @@ const STATE = {
 };
 
 // ============================================
-// FUNÇÕES UTILITÁRIAS
+// INICIALIZAÇÃO DOS DADOS
 // ============================================
 
-function log(message) {
-    console.log(`[ANIMA] ${message}`);
-}
-
-function error(message) {
-    console.error(`[ANIMA ERRO] ${message}`);
-}
-
-// ============================================
-// CARREGAMENTO DE DADOS
-// ============================================
-
-async function loadData() {
+function loadData() {
     try {
-        log('Carregando dados...');
+        console.log('[ANIMA] Carregando dados...');
         
-        // Carrega questões do JSON
-        const questionsResponse = await fetch('data/questions.json');
-        if (!questionsResponse.ok) throw new Error('Erro ao carregar questions.json');
-        const questionsData = await questionsResponse.json();
-        STATE.questions = questionsData.questions || [];
+        // Carrega dados dos ficheiros JavaScript
+        // Estes estão disponíveis porque foram carregados no HTML
+        if (typeof QUESTIONS_DATA !== 'undefined' && QUESTIONS_DATA.questions) {
+            STATE.questions = QUESTIONS_DATA.questions;
+            console.log(`[ANIMA] ${STATE.questions.length} questões carregadas`);
+        } else {
+            throw new Error('QUESTIONS_DATA não definido');
+        }
         
-        // Carrega animais do JSON
-        const animalsResponse = await fetch('data/animals.json');
-        if (!animalsResponse.ok) throw new Error('Erro ao carregar animals.json');
-        const animalsData = await animalsResponse.json();
-        STATE.animals = animalsData.animals || {};
+        if (typeof ANIMALS_DATA !== 'undefined') {
+            STATE.animals = ANIMALS_DATA;
+            console.log(`[ANIMA] ${Object.keys(STATE.animals).length} animais carregados`);
+        } else {
+            throw new Error('ANIMALS_DATA não definido');
+        }
         
-        log(`Dados carregados: ${STATE.questions.length} questões, ${Object.keys(STATE.animals).length} animais`);
         return true;
         
     } catch (err) {
-        error(`Falha ao carregar dados: ${err.message}`);
+        console.error('[ANIMA ERRO] Falha ao carregar dados:', err.message);
         return false;
     }
 }
@@ -68,9 +59,9 @@ function showScreen(screenId) {
     const targetScreen = document.getElementById(screenId);
     if (targetScreen) {
         targetScreen.classList.add('active');
-        log(`Tela: ${screenId}`);
+        console.log(`[ANIMA] Tela: ${screenId}`);
     } else {
-        error(`Tela não encontrada: ${screenId}`);
+        console.error(`[ANIMA ERRO] Tela não encontrada: ${screenId}`);
     }
 }
 
@@ -84,7 +75,7 @@ function initMenu() {
     const overlay = document.getElementById('menuOverlay');
     
     if (!menuBtn || !sideMenu) {
-        error('Elementos do menu não encontrados');
+        console.error('[ANIMA ERRO] Elementos do menu não encontrados');
         return;
     }
     
@@ -111,16 +102,7 @@ function initMenu() {
         }
     });
     
-    // Fechar ao clicar fora
-    document.addEventListener('click', (e) => {
-        if (sideMenu.classList.contains('active') && 
-            !sideMenu.contains(e.target) && 
-            e.target !== menuBtn) {
-            toggleMenu();
-        }
-    });
-    
-    log('Menu inicializado');
+    console.log('[ANIMA] Menu inicializado');
 }
 
 // ============================================
@@ -132,7 +114,7 @@ function initWheel() {
     const wheel = document.getElementById('mainWheel');
     
     if (!spinBtn || !wheel) {
-        error('Elementos da roda não encontrados');
+        console.error('[ANIMA ERRO] Elementos da roda não encontrados');
         return;
     }
     
@@ -154,7 +136,7 @@ function initWheel() {
         }, 4100);
     });
     
-    log('Roda inicializada');
+    console.log('[ANIMA] Roda inicializada');
 }
 
 // ============================================
@@ -163,7 +145,7 @@ function initWheel() {
 
 function renderQuestion() {
     if (!STATE.questions.length || STATE.currentQuestion >= STATE.questions.length) {
-        error('Nenhuma questão disponível');
+        console.error('[ANIMA ERRO] Nenhuma questão disponível');
         return;
     }
     
@@ -183,8 +165,6 @@ function renderQuestion() {
         button.className = 'spin-trigger option-btn';
         button.textContent = option.t;
         button.setAttribute('role', 'option');
-        button.setAttribute('aria-posinset', index + 1);
-        button.setAttribute('aria-setsize', question.a.length);
         
         button.addEventListener('click', () => {
             handleAnswer(option.s);
@@ -196,9 +176,8 @@ function renderQuestion() {
     // Atualiza progresso
     const progress = ((STATE.currentQuestion + 1) / STATE.questions.length) * 100;
     document.getElementById('progress-bar').style.width = `${progress}%`;
-    document.getElementById('progress-bar').setAttribute('aria-valuenow', progress);
     
-    log(`Questão ${STATE.currentQuestion + 1} renderizada`);
+    console.log(`[ANIMA] Questão ${STATE.currentQuestion + 1} renderizada`);
 }
 
 function handleAnswer(animalSlug) {
@@ -239,7 +218,7 @@ function showResult() {
     const result = STATE.animals[winner];
     
     if (!result) {
-        error(`Animal não encontrado: ${winner}`);
+        console.error(`[ANIMA ERRO] Animal não encontrado: ${winner}`);
         alert('Erro ao calcular resultado. Tente novamente.');
         return;
     }
@@ -255,12 +234,10 @@ function showResult() {
     // Mostra tela de resultado
     showScreen('sc-result');
     
-    log(`Resultado: ${result.n} (${winner})`);
+    console.log(`[ANIMA] Resultado: ${result.n} (${winner})`);
 }
 
 function saveToHistory(result) {
-    if (!CONFIG.useLocalStorage) return;
-    
     try {
         const historyItem = {
             animal: result.n,
@@ -290,7 +267,7 @@ function saveToHistory(result) {
         localStorage.setItem('anima_history', JSON.stringify(history));
         
     } catch (err) {
-        error(`Erro ao salvar histórico: ${err.message}`);
+        console.error(`[ANIMA ERRO] Erro ao salvar histórico: ${err.message}`);
     }
 }
 
@@ -321,7 +298,7 @@ function initButtons() {
         });
     }
     
-    log('Botões inicializados');
+    console.log('[ANIMA] Botões inicializados');
 }
 
 function showHistoryModal() {
@@ -334,7 +311,7 @@ function showHistoryModal() {
             if (!Array.isArray(history)) history = [];
         }
     } catch (err) {
-        error(`Erro ao ler histórico: ${err.message}`);
+        console.error(`[ANIMA ERRO] Erro ao ler histórico: ${err.message}`);
     }
     
     const modal = document.createElement('div');
@@ -392,7 +369,7 @@ function showHistoryModal() {
 }
 
 // ============================================
-// SISTEMA DE PARTÍCULAS (simplificado)
+// SISTEMA DE PARTÍCULAS
 // ============================================
 
 function initParticles() {
@@ -439,15 +416,15 @@ function initParticles() {
     
     window.addEventListener('resize', resizeCanvas);
     
-    log('Partículas inicializadas');
+    console.log('[ANIMA] Partículas inicializadas');
 }
 
 // ============================================
 // INICIALIZAÇÃO
 // ============================================
 
-async function initApp() {
-    log('Inicializando ANIMA...');
+function initApp() {
+    console.log('[ANIMA] Inicializando sistema...');
     
     const initBtn = document.getElementById('initBtn');
     const loadingEl = document.getElementById('loading-state');
@@ -463,7 +440,7 @@ async function initApp() {
         initWheel();
         
         // Carrega dados
-        const loaded = await loadData();
+        const loaded = loadData();
         
         if (!loaded || STATE.questions.length === 0 || Object.keys(STATE.animals).length === 0) {
             throw new Error('Dados não carregados corretamente');
@@ -476,10 +453,10 @@ async function initApp() {
         }
         
         STATE.initialized = true;
-        log('Sistema ANIMA inicializado com sucesso!');
+        console.log('[ANIMA] Sistema inicializado com sucesso!');
         
     } catch (err) {
-        error(`Falha na inicialização: ${err.message}`);
+        console.error(`[ANIMA ERRO] Falha na inicialização: ${err.message}`);
         
         if (initBtn) {
             initBtn.textContent = 'ERRO - RECARREGAR';
@@ -487,7 +464,7 @@ async function initApp() {
             initBtn.onclick = () => location.reload();
         }
         
-        alert('Erro ao carregar o sistema. Verifique os ficheiros JSON na pasta "data" e recarregue a página.');
+        alert('Erro ao carregar o sistema. Recarregue a página.');
         
     } finally {
         if (loadingEl) loadingEl.style.display = 'none';
