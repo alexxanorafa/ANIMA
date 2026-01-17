@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ANIMA | Neural Shamanism OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bio-field"></div> <header>
+        <div class="status-monitor">SYSTEM_ACTIVE // RESONANCE_STABLE</div>
+        <div class="menu-icon" id="menuBtn"><span></span><span></span></div>
+    </header>
+
+    <nav class="side-matrix" id="sideMenu">
+        <div class="matrix-header">ECOSSISTEMA_ALEXXANORAFA</div>
+        <div class="links-grid">
+            <a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/">01. TEMPO_E_SONHOS</a>
+            <a href="https://alexxanorafa.github.io/posicionamentodosastros/">02. MAPA_ASTRAL</a>
+            <a href="https://alexxanorafa.github.io/Aneis_da_Sabedoria/">03. ANEIS_SABEDORIA</a>
+            <a href="https://alexxanorafa.github.io/TarodeMarselha/">04. TARO_MARSELHA</a>
+            </div>
+    </nav>
+
+    <main id="core-engine">
+        <section id="sc-intro" class="screen active">
+            <div class="glitch-box">
+                <h1 class="main-title" data-text="ANIMA">ANIMA</h1>
+                <p class="neuro-tag">PROTOCOL_BIO_QUANTUM_2030</p>
+            </div>
+            <button class="init-trigger" onclick="App.startRitual()">INICIAR SINCRONIZAÇÃO</button>
+        </section>
+
+        <section id="sc-wheel" class="screen">
+            <div class="wheel-module">
+                <div class="pointer"></div>
+                <div id="mainWheel" class="quantum-wheel"></div>
+                <button class="spin-trigger" id="spinBtn" onclick="App.spin()">GERAR FREQUÊNCIA</button>
+            </div>
+        </section>
+
+        <section id="sc-quiz" class="screen">
+            <div class="quiz-interface">
+                <div id="q-portal" class="portal-badge">PORTAL_01</div>
+                <h2 id="q-text">A Processar pergunta...</h2>
+                <div id="q-options" class="options-stack"></div>
+                <div class="dna-progress"><div id="progress-bar"></div></div>
+            </div>
+        </section>
+
+        <section id="sc-result" class="screen">
+            <div class="result-matrix">
+                <div class="hologram-space">
+                    <div id="res-glyph" class="glyph-anim"></div>
+                </div>
+                <div class="result-data">
+                    <h2 id="res-name">ANIMAL</h2>
+                    <div class="tabs-2030">
+                        <div class="tab-content active" id="tab-psico">
+                            <h3>PERFIL PSICOLÓGICO</h3>
+                            <p id="res-desc"></p>
+                        </div>
+                    </div>
+                    <div class="chakra-pulse" id="res-chakra">CHAKRA</div>
+                    <button class="reboot" onclick="location.reload()">REBOOT_SYSTEM</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
