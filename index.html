@@ -3,67 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ANIMA | Neural Shamanism OS</title>
+    <title>ANIMA | Shamanic OS</title>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="bio-field"></div> <header>
-        <div class="status-monitor">SYSTEM_ACTIVE // RESONANCE_STABLE</div>
-        <div class="menu-icon" id="menuBtn"><span></span><span></span></div>
+    <!-- Background -->
+    <div class="bio-field"></div> 
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Header -->
+    <header>
+        <div class="status-monitor">SISTEMA_ATIVO // MODO_PRESENÇA</div>
+        <div class="menu-icon" id="menuBtn" aria-label="Abrir menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </header>
 
-    <nav class="side-matrix" id="sideMenu">
-        <div class="matrix-header">ECOSSISTEMA_ALEXXANORAFA</div>
+    <!-- Menu Lateral -->
+    <nav class="side-matrix" id="sideMenu" aria-label="Menu de navegação">
+        <div class="matrix-header">ECOSSISTEMA DIGITAL</div>
         <div class="links-grid">
-            <a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/">01. TEMPO_E_SONHOS</a>
-            <a href="https://alexxanorafa.github.io/posicionamentodosastros/">02. MAPA_ASTRAL</a>
-            <a href="https://alexxanorafa.github.io/Aneis_da_Sabedoria/">03. ANEIS_SABEDORIA</a>
-            <a href="https://alexxanorafa.github.io/TarodeMarselha/">04. TARO_MARSELHA</a>
-            </div>
+            <a href="https://alexxanorafa.github.io/Alquimia-dos-Sentimentos/">ALQUIMIA DOS SENTIMENTOS</a>
+            <a href="https://alexxanorafa.github.io/Almas-Conectadas/">ALMAS CONECTADAS</a>
+            <a href="https://alexxanorafa.github.io/Aneis_da_Sabedoria/">ANÉIS DA SABEDORIA</a>
+            <a href="https://alexxanorafa.github.io/Animais-de-Poder/">ANIMAIS DE PODER</a>
+            <a href="https://alexxanorafa.github.io/Arvore-da-Vida/">ÁRVORE DA VIDA</a>
+            <a href="https://alexxanorafa.github.io/Biblioteca-Onirica/">BIBLIOTECA ONIRICA</a>
+            <a href="https://alexxanorafa.github.io/Buzios/">BUZIOS</a>
+            <a href="https://alexxanorafa.github.io/Cartas-de-Sibila/">CARTAS DE SIBILA</a>
+            <a href="https://alexxanorafa.github.io/Do-you-love-me/">DO YOU LOVE ME?</a>
+            <a href="https://alexxanorafa.github.io/I-Ching-Virtual/">I CHING VIRTUAL</a>
+            <a href="https://alexxanorafa.github.io/Jogo-Didatico-Banco-de-Dados/">JOGO DIDATICO BANCO DE DADOS</a>
+            <a href="https://alexxanorafa.github.io/Jornada-Arquetipica/">JORNADA ARQUETÍPICA</a>
+            <a href="https://alexxanorafa.github.io/Jornadas-Mitologica/">JORNADA MITOLÓGICA</a>
+            <a href="https://alexxanorafa.github.io/Livro-das-Sombras/">LIVRO DAS SOMBRAS</a>
+            <a href="https://alexxanorafa.github.io/Magia-das-Cores/">MAGIA DAS CORES</a>
+            <a href="https://alexxanorafa.github.io/Murmurios-do-Destino/">MURMÚRIOS DO DESTINO</a>
+            <a href="https://alexxanorafa.github.io/O-Construtor-do-Destino/">O CONSTRUTOR DO DESTINO</a>
+            <a href="https://alexxanorafa.github.io/Oraculo-das-Pedras/">ORÁCULO DAS PEDRAS</a>
+            <a href="https://alexxanorafa.github.io/Oraculo-dos-Deuses/">ORÁCULO DOS DEUSES</a>
+            <a href="https://alexxanorafa.github.io/Oraculo-Numerologico/">ORÁCULO NUMEROLÓGICO</a>
+            <a href="https://alexxanorafa.github.io/Pendulo-Divinatorio/">PENDULO DIVINATORIO</a>
+            <a href="https://alexxanorafa.github.io/Portal-das-Almas/">PORTAL DAS ALMAS</a>
+            <a href="https://alexxanorafa.github.io/Runas-Celtas/">RUNAS CELTAS</a>
+            <a href="https://alexxanorafa.github.io/Runas-Estelares/">RUNAS ESTELARES</a>
+            <a href="https://alexxanorafa.github.io/Runas-do-Destino/">RUNAS NÓRDICAS</a>
+            <a href="https://alexxanorafa.github.io/Tabuleiro-Quantico/">TABULEIRO QUANTICO</a>
+            <a href="https://alexxanorafa.github.io/TarodeMarselha/">TARÔ DE MARSELHA</a>
+            <a href="https://alexxanorafa.github.io/Tasseografia/">TASSEOGRAFIA</a>
+            <a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/">TEMPO E SONHOS</a>
+            <a href="https://alexxanorafa.github.io/The-Da-Vinci-Code/">THE DA VINCI CODE</a>
+            <a href="https://alexxanorafa.github.io/Velvet-Quantum/">VELVET QUANTUM</a>
+            <a href="https://alexxanorafa.github.io/Whispering-Shadows/">WHISPERING SHADOWS</a>
+            <a href="https://alexxanorafa.github.io/Whispering-Shadows-2/">WHISPERING SHADOWS 2</a>
+            <a href="https://alexxanorafa.github.io/Whispering-Shadows-3/">WHISPERING SHADOWS 3</a>
+            <a href="https://alexxanorafa.github.io/Xamanismo-Animal/">XAMANISMO ANIMAL</a>
+        </div>
     </nav>
 
+    <!-- Overlay para fechar menu -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Conteúdo Principal -->
     <main id="core-engine">
+        <!-- Tela de Introdução -->
         <section id="sc-intro" class="screen active">
             <div class="glitch-box">
                 <h1 class="main-title" data-text="ANIMA">ANIMA</h1>
-                <p class="neuro-tag">PROTOCOL_BIO_QUANTUM_2030</p>
+                <p class="neuro-tag">PSICOLOGIA ARQUETÍPICA</p>
             </div>
-            <button class="init-trigger" onclick="App.startRitual()">INICIAR SINCRONIZAÇÃO</button>
+            
+            <!-- Estado de carregamento -->
+            <div id="loading-state" class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>CARREGANDO JORNADA...</p>
+            </div>
+            
+            <!-- Botão -->
+            <button class="init-trigger" id="initBtn" disabled aria-label="Iniciar jornada">
+                CARREGANDO...
+            </button>
         </section>
 
+        <!-- Tela da Roda -->
         <section id="sc-wheel" class="screen">
             <div class="wheel-module">
-                <div class="pointer"></div>
-                <div id="mainWheel" class="quantum-wheel"></div>
-                <button class="spin-trigger" id="spinBtn" onclick="App.spin()">GERAR FREQUÊNCIA</button>
+                <div class="pointer" aria-hidden="true">▼</div>
+                <div id="mainWheel" class="quantum-wheel" role="img" aria-label="Roda quântica de sincronização"></div>
+                <button class="spin-trigger" id="spinBtn" aria-label="Sincronizar destino">SINCRONIZAR DESTINO</button>
             </div>
         </section>
 
+        <!-- Tela do Quiz -->
         <section id="sc-quiz" class="screen">
             <div class="quiz-interface">
-                <div id="q-portal" class="portal-badge">PORTAL_01</div>
-                <h2 id="q-text">A Processar pergunta...</h2>
-                <div id="q-options" class="options-stack"></div>
-                <div class="dna-progress"><div id="progress-bar"></div></div>
+                <div id="q-portal" class="portal-badge">ETAPA 01/12</div>
+                <h2 id="q-text">A PROCESSAR...</h2>
+                <div id="q-options" class="options-stack" role="list"></div>
+                <div class="dna-progress">
+                    <div id="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+                </div>
             </div>
         </section>
 
+        <!-- Tela de Resultado -->
         <section id="sc-result" class="screen">
             <div class="result-matrix">
-                <div class="hologram-space">
-                    <div id="res-glyph" class="glyph-anim"></div>
-                </div>
                 <div class="result-data">
                     <h2 id="res-name">ANIMAL</h2>
                     <div class="tabs-2030">
-                        <div class="tab-content active" id="tab-psico">
+                        <div class="tab-content active">
                             <h3>PERFIL PSICOLÓGICO</h3>
                             <p id="res-desc"></p>
                         </div>
                     </div>
                     <div class="chakra-pulse" id="res-chakra">CHAKRA</div>
-                    <button class="reboot" onclick="location.reload()">REBOOT_SYSTEM</button>
+                    <button class="reboot" id="restartBtn" aria-label="Nova sincronização">NOVA SINCRONIZAÇÃO</button>
+                    <button class="reboot" id="historyBtn" aria-label="Ver histórico">VER MEU HISTÓRICO</button>
                 </div>
             </div>
         </section>

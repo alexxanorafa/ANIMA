@@ -1,51 +1,621 @@
 :root {
     --neon: #00f2ff;
-    --gold: #ffcc00;
+    --neon-glow: #00ffff;
     --dark: #020502;
-    --glass: rgba(255, 255, 255, 0.03);
+    --dark-bg: rgba(2,5,2,0.95);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Syncopate', sans-serif; cursor: crosshair; }
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Syncopate', sans-serif; 
+    cursor: crosshair; 
+}
 
-body { background: var(--dark); color: #fff; height: 100vh; overflow: hidden; }
+body { 
+    background: var(--dark); 
+    color: #fff; 
+    height: 100vh; 
+    overflow: hidden; 
+    position: relative;
+}
 
-/* Bio-Field Background */
 .bio-field {
-    position: fixed; inset: 0; z-index: -1;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
     background: radial-gradient(circle at 50% 50%, #0a1c18, var(--dark));
 }
 
-/* A Roda Quântica */
-.quantum-wheel {
-    width: 320px; height: 320px; border-radius: 50%;
-    border: 1px solid var(--neon); position: relative;
-    transition: 4s cubic-bezier(0.1, 0, 0.1, 1);
-    background: repeating-conic-gradient(from 0deg, transparent 0 30deg, rgba(0,242,255,0.05) 30deg 60deg);
+/* Canvas de Partículas */
+#particles-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
 }
 
-.spin-trigger {
-    margin-top: 40px; padding: 20px 40px; background: transparent;
-    border: 1px solid var(--neon); color: var(--neon);
-    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
-    transition: 0.3s; font-weight: bold;
+/* Header */
+header {
+    position: fixed; 
+    top: 0; 
+    width: 100%; 
+    padding: 20px 30px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    z-index: 1000;
 }
-.spin-trigger:hover { background: var(--neon); color: var(--dark); box-shadow: 0 0 30px var(--neon); }
 
-/* Matrix Menu */
+.status-monitor { 
+    font-size: 0.5rem; 
+    color: var(--neon); 
+    opacity: 0.6; 
+    letter-spacing: 2px; 
+}
+
+/* Menu Icon */
+.menu-icon { 
+    width: 30px; 
+    height: 24px; 
+    cursor: pointer; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    z-index: 1002; 
+    position: relative;
+    background: transparent;
+    border: none;
+}
+
+.menu-icon span { 
+    display: block; 
+    width: 100%; 
+    height: 2px; 
+    background: var(--neon); 
+    transition: 0.3s; 
+    box-shadow: 0 0 8px var(--neon); 
+}
+
+.menu-icon:hover span {
+    background: var(--neon-glow);
+    box-shadow: 0 0 12px var(--neon-glow);
+}
+
+/* Menu Lateral */
 .side-matrix {
-    position: fixed; top: 0; right: -400px; width: 380px; height: 100%;
-    background: rgba(2,5,2,0.98); border-left: 1px solid var(--neon);
-    transition: 0.6s cubic-bezier(0.8, 0, 0.2, 1); z-index: 1000;
-    padding: 60px 40px;
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100%;
+    background: var(--dark-bg);
+    border-left: 1px solid var(--neon);
+    box-shadow: -10px 0 30px rgba(0, 242, 255, 0.1);
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1001;
+    padding: 80px 20px 20px 20px;
+    overflow-y: auto;
 }
-.side-matrix.active { right: 0; }
+
+.side-matrix.active {
+    right: 0;
+}
+
+/* Menu Overlay */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(2, 5, 2, 0.7);
+    z-index: 1000;
+    display: none;
+}
+
+.menu-overlay.active {
+    display: block;
+}
+
+/* Conteúdo do Menu */
+.matrix-header {
+    font-size: 1.2rem;
+    color: var(--neon);
+    margin-bottom: 30px;
+    letter-spacing: 3px;
+    text-align: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+}
+
+.links-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .links-grid a {
-    display: block; color: var(--neon); text-decoration: none; font-size: 0.6rem;
-    padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: rgba(0, 242, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.75rem;
+    padding: 12px 15px;
+    border: 1px solid rgba(0, 242, 255, 0.1);
+    border-radius: 4px;
+    transition: all 0.3s;
+    background: rgba(0, 242, 255, 0.03);
 }
 
-/* Utility Screens */
-.screen { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; flex-direction: column; }
-.screen.active { display: flex; animation: quantum-in 0.8s ease; }
+.links-grid a:hover,
+.links-grid a:focus {
+    background: rgba(0, 242, 255, 0.1);
+    border-color: var(--neon);
+    color: #fff;
+    padding-left: 20px;
+    outline: none;
+}
 
-@keyframes quantum-in { from { opacity: 0; transform: scale(1.1) rotate(2deg); filter: blur(10px); } to { opacity: 1; transform: scale(1) rotate(0); filter: blur(0); } }
+/* Sistema de Telas */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.screen.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* Tela de Introdução */
+.glitch-box {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.main-title {
+    font-size: 4rem;
+    color: var(--neon);
+    text-shadow: 0 0 20px var(--neon);
+    position: relative;
+    margin-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+    .main-title {
+        font-size: 5rem;
+    }
+}
+
+.neuro-tag {
+    font-size: 0.9rem;
+    color: rgba(0, 242, 255, 0.9);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* Estado de Carregamento */
+.loading-state {
+    margin: 30px 0;
+    text-align: center;
+    display: block;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 15px;
+    border: 3px solid rgba(0, 242, 255, 0.2);
+    border-top: 3px solid var(--neon);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-state p {
+    color: rgba(0, 242, 255, 0.7);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+/* Botão Inicial */
+.init-trigger {
+    margin-top: 30px;
+    padding: 15px 40px;
+    background: transparent;
+    border: 2px solid var(--neon);
+    color: var(--neon);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.init-trigger:not(:disabled):hover,
+.init-trigger:not(:disabled):focus {
+    background: var(--neon);
+    color: var(--dark);
+    box-shadow: 0 0 25px var(--neon);
+    transform: scale(1.05);
+    outline: none;
+}
+
+.init-trigger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: rgba(0, 242, 255, 0.3);
+    color: rgba(0, 242, 255, 0.3);
+}
+
+/* Tela da Roda */
+.wheel-module {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pointer {
+    position: absolute;
+    top: -25px;
+    color: var(--neon);
+    font-size: 2rem;
+    text-shadow: 0 0 10px var(--neon);
+    z-index: 10;
+}
+
+.quantum-wheel {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    border: 1px solid var(--neon);
+    transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1);
+    background: repeating-conic-gradient(
+        from 0deg, 
+        transparent 0 30deg, 
+        rgba(0, 242, 255, 0.05) 30deg 60deg
+    );
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+}
+
+@media (min-width: 768px) {
+    .quantum-wheel {
+        width: 320px;
+        height: 320px;
+    }
+}
+
+/* Botões Gerais */
+.spin-trigger {
+    margin-top: 40px;
+    padding: 15px 30px;
+    background: transparent;
+    border: 1px solid var(--neon);
+    color: var(--neon);
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.spin-trigger:hover:not(:disabled),
+.spin-trigger:focus:not(:disabled) {
+    background: var(--neon);
+    color: var(--dark);
+    box-shadow: 0 0 20px var(--neon);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.spin-trigger:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.spin-trigger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Tela do Quiz */
+.quiz-interface {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    padding: 20px;
+}
+
+.portal-badge {
+    font-size: 0.8rem;
+    color: var(--neon);
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.options-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 40px 0;
+    align-items: center;
+}
+
+.option-btn {
+    padding: 15px 20px;
+    margin: 5px 0;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    transition: all 0.3s;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Barra de Progresso */
+.dna-progress {
+    width: 100%;
+    max-width: 500px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 30px auto;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon), var(--neon-glow));
+    width: 0%;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 10px var(--neon);
+}
+
+/* Tela de Resultado */
+.result-matrix {
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid var(--neon);
+    padding: 30px;
+    background: rgba(2, 5, 2, 0.8);
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+}
+
+.result-data h2 {
+    font-size: 2.5rem;
+    color: var(--neon);
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px var(--neon);
+}
+
+@media (min-width: 768px) {
+    .result-data h2 {
+        font-size: 3rem;
+    }
+}
+
+.tabs-2030 {
+    margin: 30px 0;
+    text-align: left;
+}
+
+.tab-content h3 {
+    color: rgba(0, 242, 255, 0.8);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.tab-content p {
+    line-height: 1.6;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    min-height: 80px;
+}
+
+.chakra-pulse {
+    margin: 30px 0;
+    padding: 15px;
+    border: 1px solid var(--neon);
+    color: var(--neon);
+    font-size: 1.2rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1; 
+        box-shadow: 0 0 10px var(--neon);
+    }
+    50% { 
+        opacity: 0.7; 
+        box-shadow: 0 0 20px var(--neon);
+    }
+}
+
+/* Botões de Reinício */
+.reboot {
+    margin: 10px;
+    padding: 12px 25px;
+    background: transparent;
+    border: 1px solid var(--neon);
+    color: var(--neon);
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.9rem;
+}
+
+.reboot:hover,
+.reboot:focus {
+    background: var(--neon);
+    color: var(--dark);
+    box-shadow: 0 0 15px var(--neon);
+    outline: none;
+}
+
+/* Modal de Histórico */
+.history-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(2, 5, 2, 0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.history-modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.history-content {
+    background: rgba(2, 5, 2, 0.95);
+    border: 1px solid var(--neon);
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
+}
+
+.history-content h2 {
+    color: var(--neon);
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.history-list {
+    margin: 20px 0;
+}
+
+.history-item {
+    border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+    padding: 15px 0;
+    margin-bottom: 10px;
+}
+
+.history-animal {
+    font-size: 1.2rem;
+    color: var(--neon);
+    margin-bottom: 5px;
+}
+
+.history-chakra {
+    font-size: 0.9rem;
+    color: rgba(0, 242, 255, 0.7);
+    margin-bottom: 5px;
+}
+
+.history-date {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.no-history {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    font-style: italic;
+}
+
+.close-history {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+}
+
+/* Scrollbar personalizada */
+.side-matrix::-webkit-scrollbar,
+.history-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.side-matrix::-webkit-scrollbar-track,
+.history-content::-webkit-scrollbar-track {
+    background: rgba(2, 5, 2, 0.5);
+}
+
+.side-matrix::-webkit-scrollbar-thumb,
+.history-content::-webkit-scrollbar-thumb {
+    background: var(--neon);
+    border-radius: 10px;
+}
+
+.side-matrix::-webkit-scrollbar-thumb:hover,
+.history-content::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-glow);
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    header {
+        padding: 15px 20px;
+    }
+    
+    .main-title {
+        font-size: 3rem;
+    }
+    
+    .quantum-wheel {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .quiz-interface,
+    .result-matrix {
+        padding: 15px;
+    }
+    
+    .side-matrix {
+        width: 280px;
+        right: -280px;
+        padding: 70px 15px 15px 15px;
+    }
+    
+    .init-trigger,
+    .spin-trigger,
+    .option-btn {
+        padding: 12px 20px;
+        font-size: 0.85rem;
+    }
+}
